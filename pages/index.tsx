@@ -1,24 +1,23 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
   return (
-    <div className={styles.container}>
+    <div className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
       <Head>
         <title>Wayru challenge</title>
         <meta name="description" content="the best purse manager app" />
         <link rel="icon" href="/logoWayru.png" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Login with <a href="https://metamask.io/">Metamask!</a>
-        </h1>
-      </main>
-       
-      <footer className={styles.footer}>
+      <h1>
+        Login with <a href="https://metamask.io/">Metamask!</a>
+      </h1>
+      <div>
+        <h1>Connect</h1>
+      </div>
+
+      <footer className="text-sm">
         <a
           href="https://www.wayru.io/"
           target="_blank"
