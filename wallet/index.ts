@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import { jsonAbi } from "./jsonAbi";
 
-const contractAddress = "0x286cbAD20522fE35355a6E2BB5c117AFe796f5b8"; // address of the token contract
+// const contractAddress = "0x286cbAD20522fE35355a6E2BB5c117AFe796f5b8"; // address of the  contract
+const contractAddress = "0x6F4b31111E0670aD45354EF9f9DC2cC8BA6e18CE"; // address of the contract
 
 export const verifyNetwork = async () => {
   const web3 = window.ethereum;
@@ -49,7 +50,7 @@ export const connectHandler = async () => {
       const res = await web3.request({
         method: "eth_requestAccounts",
       });
-
+      console.log(res[0]);
       // store.wallet.setAccount(res[0]);
       // store.wallet.setConnecting(false);
       // store.wallet.setConnected(true);
@@ -116,8 +117,13 @@ export const getBalance = async () => {
   // JSON ABI of the token contract
   const provider = new ethers.providers.Web3Provider(web3);
   //const tokenAddress = store.wallet.account; // address of which you want to get the token balance
-  const contract = new ethers.Contract(contractAddress, jsonAbi, provider);
+  const contract = new ethers.Contract(
+    contractAddress,
+    jsonAbi,
+    provider.getSigner()
+  );
   const balance = await contract.getBalance();
+  console.log(balance);
   const stringBalance = (
     parseFloat(balance.toString()) / 1000000000000000000
   ).toString();
