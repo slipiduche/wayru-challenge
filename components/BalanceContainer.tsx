@@ -19,7 +19,7 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
   const dispatch = useDispatch();
 
   return (
-    <div className="container -mt-10 lg:-mt-16 max-w-3xl">
+    <div className="container -mt-10 lg:-mt-16 max-w-4xl">
       <div className="relative bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-8 rounded-3xl md:rounded-[40px] shadow-xl flex flex-col md:flex-row">
         <div className="pt-5 md:pt-1 md:ml-6 xl:ml-14 flex-grow">
           <div className="max-w-screen-sm ">
