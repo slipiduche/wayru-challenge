@@ -1,12 +1,14 @@
 import React, { FC, useState } from "react";
+import Image from "next/image";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { compose } from "redux";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
 import { lockFunds, withdraw } from "../store/wallet";
 import { ActionDialog } from "./ActionDialog";
 import { ContactForm } from "./ContactForm";
+import { connectHandler } from "../store/wallet/index";
 const BalanceContainer: FC<{ state_wallet; state_error }> = ({
   state_wallet,
   state_error,
@@ -14,6 +16,7 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [actionDialogType, setActionDialogType] = useState(null);
   const [successDialogContent, setSuccessDialogContent] = useState(null);
+  const dispatch = useDispatch();
 
   return (
     <div className="container -mt-10 lg:-mt-16">
@@ -24,11 +27,11 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
               <span>My Balance</span>
             </h2>
 
-            <CopyToClipboard text={state_wallet.account ?? "..."}>
-              <div className="flex items-center text-md font-medium space-x-2.5 mt-2.5 text-green-600 cursor-pointer">
-                <span className="overflow-auto text-neutral-700 dark:text-neutral-300 ">
-                  My address: {state_wallet.account ?? "..."}
-                </span>
+            <div className="flex items-center text-md font-medium space-x-2.5 mt-2.5 text-green-600 cursor-pointer">
+              <span className="overflow-auto text-neutral-700 dark:text-neutral-300 ">
+                My address: {state_wallet.account ?? "..."}
+              </span>
+              <CopyToClipboard text={state_wallet.account ?? "..."}>
                 <svg width="20" height="21" viewBox="0 0 20 21" fill="none">
                   <path
                     d="M18.05 9.19992L17.2333 12.6833C16.5333 15.6916 15.15 16.9083 12.55 16.6583C12.1333 16.6249 11.6833 16.5499 11.2 16.4333L9.79999 16.0999C6.32499 15.2749 5.24999 13.5583 6.06665 10.0749L6.88332 6.58326C7.04999 5.87492 7.24999 5.25826 7.49999 4.74992C8.47499 2.73326 10.1333 2.19159 12.9167 2.84993L14.3083 3.17493C17.8 3.99159 18.8667 5.71659 18.05 9.19992Z"
@@ -45,8 +48,18 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
                     strokeLinejoin="round"
                   />
                 </svg>
-              </div>
-            </CopyToClipboard>
+              </CopyToClipboard>
+              <Image
+                src="/reloadIcon.svg"
+                alt="Vercel Logo"
+                width={72}
+                height={16}
+                onClick={() => {
+                  connectHandler(dispatch);
+                }}
+              />
+            </div>
+
             <div className="mt-8 xl:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 xl:gap-6">
               <div className="rounded-2xl flex flex-col items-center justify-center shadow-md border border-neutral-50 dark:border-neutral-800 p-5 lg:p-6">
                 <span className="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
