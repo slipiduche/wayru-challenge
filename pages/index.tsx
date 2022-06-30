@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { compose } from "redux";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
-import { BalanceContainer } from "../components/BalanceContainer";
+import BalanceContainer from "../components/BalanceContainer";
 import {
   accountsChanged,
   chainChanged,
@@ -37,7 +37,6 @@ const Home: NextPage<{
   }, []);
   useEffect(() => {
     console.log(state_wallet);
-    console.log(state_wallet.balance.indexOf("."));
   }, [state_wallet, state_error]);
   const [walletConnected, setwalletConnected] = useState(false);
   return (
@@ -71,7 +70,8 @@ const Home: NextPage<{
           </ButtonPrimary>
         </div>
       </div>
-      <BalanceContainer state_wallet={state_wallet}></BalanceContainer>
+      <BalanceContainer></BalanceContainer>
+
       {/* <footer className="nc-Footer relative py-20 lg:pt-32 lg:pb-28 border-t border-neutral-200 dark:border-neutral-700">
         <div className="container grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-4 lg:gap-x-10 ">
           <a

@@ -16,7 +16,7 @@ export const ActionDialog: FC<{
   actionFunction,
   cancelFunction,
 }) => {
-  const [value, setvalue] = useState(0.0);
+  const [value, setvalue] = useState("0.0");
   return (
     <>
       <div className="justify-center items-center flex overflow-x-hidden  overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none dark:text-neutral-200">
@@ -28,22 +28,29 @@ export const ActionDialog: FC<{
               <h3 className="text-3xl pb-2 font-semibold">{actionTitle}</h3>
             </div>
             {/*body*/}
-            <div className="relative px-6  flex-auto">
-              <p className="pb-0 pt-4  text-slate-500 text-lg leading-relaxed">
-                {actionContent}
-              </p>
-            </div>
-
-            <div className="relative px-6 flex items-center justify-start">
-              <p className="pb-0 pt-4   text-slate-500 text-lg leading-relaxed">
-                {actionText == "Deposit"
-                  ? "Please set a value to deposit"
-                  : "Please set a value to withdraw"}
-              </p>
-            </div>
-
-            {/** Render Input outside the div */}
-            {
+            {actionText != "Send" ? (
+              <div className="relative px-6  flex-auto">
+                <p className="pb-0 pt-4  text-slate-500 text-lg leading-relaxed">
+                  {actionContent}
+                </p>
+              </div>
+            ) : (
+              <>{actionContent}</>
+            )}
+            {actionText == "Send" ? (
+              <></>
+            ) : (
+              <div className="relative px-6 flex items-center justify-start">
+                <p className="pb-0 pt-4   text-slate-500 text-lg leading-relaxed">
+                  {actionText == "Deposit"
+                    ? "Please set a value to deposit"
+                    : "Please set a value to withdraw"}
+                </p>
+              </div>
+            )}
+            {actionText == "Send" ? (
+              <></>
+            ) : (
               <div className="justify-start px-5 pt-2 pb-4">
                 <Input
                   className="max-w-2xl  shadow-lg border-0 dark:border;"
@@ -53,45 +60,47 @@ export const ActionDialog: FC<{
                   sizeClass=" px-5 py-5 h-12 md:pl-4"
                   rounded="rounded-xl"
                   id="valueInput"
-                  min="10"
-                  value={value > 0 ? value : ""}
+                  value={parseFloat(value) >= 0 ? value : ""}
                   onChange={(e) => {
                     if (
                       parseFloat(e.target.value) >= 0 ||
                       e.target.value == ""
                     ) {
-                      setvalue(parseFloat(e.target.value));
+                      setvalue(e.target.value);
                     } else {
-                      setvalue(0);
+                      setvalue("0");
                     }
                   }}
                 />
               </div>
-            }
-
+            )}
             {/*footer*/}
-            <div className="flex items-center justify-start px-5 pt-4 pb-8 border-solid border-slate-200 rounded-b">
-              <ButtonPrimary
-                className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
-                onClick={() => {
-                  actionFunction(value);
-                }}
-              >
-                {actionTitle == "Succsess" ? "Ok" : actionText}
-              </ButtonPrimary>
-              {actionTitle == "Succsess" ? (
-                <></>
-              ) : (
-                <ButtonSecondary
-                  className="font-bold w-[110px] ml-4  text-sm ease-linear transition-all duration-150"
+            {actionText == "Send" ? (
+              <></>
+            ) : (
+              <div className="flex items-center justify-start px-5 pt-4 pb-8 border-solid border-slate-200 rounded-b">
+                <ButtonPrimary
+                  className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
                   onClick={() => {
-                    cancelFunction();
+                    if (parseFloat(value) > 0) actionFunction(value);
                   }}
                 >
-                  Close
-                </ButtonSecondary>
-              )}
-            </div>
+                  {actionTitle == "Succsess" ? "Ok" : actionText}
+                </ButtonPrimary>
+                {actionTitle == "Succsess" ? (
+                  <></>
+                ) : (
+                  <ButtonSecondary
+                    className="font-bold w-[110px] ml-4  text-sm ease-linear transition-all duration-150"
+                    onClick={() => {
+                      cancelFunction();
+                    }}
+                  >
+                    Close
+                  </ButtonSecondary>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

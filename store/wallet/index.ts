@@ -151,7 +151,7 @@ export const getContractBalance = async (dispatch) => {
 };
 
 export const withdraw = async (value) => {
-  //console.log(answers);
+  console.log(value);
 
   //console.log(answersList);
   const web3 = window.ethereum;
@@ -163,6 +163,27 @@ export const withdraw = async (value) => {
     jsonAbi,
     provider.getSigner()
   );
-  const result = await contract.withdraw(value);
+  const result = await contract.withdraw(ethers.utils.parseEther(value));
   console.log("withdraw:", result);
+};
+export const lockFunds = async (value) => {
+  const web3 = window.ethereum;
+
+  let provider = new ethers.providers.Web3Provider(web3);
+
+  let tx = {
+    to: contractAddress,
+    // Convert currency unit from ether to wei
+    value: ethers.utils.parseEther(value),
+  };
+  // Send a transaction
+  const contract = new ethers.Contract(
+    contractAddress,
+    jsonAbi,
+    provider.getSigner()
+  );
+  const result = await contract.lockEther({
+    value: ethers.utils.parseEther(value),
+  });
+  console.log("deposit:", result);
 };

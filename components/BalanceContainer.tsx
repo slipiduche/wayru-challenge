@@ -1,9 +1,16 @@
 import React, { FC, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { connect } from "react-redux";
+import { compose } from "redux";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
+import { lockFunds, withdraw } from "../store/wallet";
 import { ActionDialog } from "./ActionDialog";
-export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
+import { ContactForm } from "./ContactForm";
+const BalanceContainer: FC<{ state_wallet; state_error }> = ({
+  state_wallet,
+  state_error,
+}) => {
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [actionDialogType, setActionDialogType] = useState(null);
   return (
@@ -91,6 +98,17 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                 </ButtonSecondary>
               </div>
             </div>
+            <div className=" flex flex-col items-center justify-center dark:border-neutral-800 p-5 lg:p-6">
+              <ButtonPrimary
+                sizeClass="px-4 py-2 sm:px-5"
+                onClick={() => {
+                  setActionDialogType("contact");
+                  setShowActionDialog(true);
+                }}
+              >
+                Contact us
+              </ButtonPrimary>
+            </div>
           </div>
           {/* <div className="mt-4 ">
                     <SocialsList itemClass="block w-7 h-7" />
@@ -103,7 +121,7 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                 ? "Deposit"
                 : actionDialogType == "withdraw"
                 ? "Witdraw"
-                : "X"
+                : "Send"
             }
             actionContent={
               actionDialogType == "deposit" ? (
@@ -111,7 +129,7 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                   <div className="pl-5">
                     <span>
                       You are about to deposit funds to a contract,remember that
-                      once it is cancelled it will take some minutes to be
+                      once it is sended it will take some minutes to be
                       displayed on contract
                     </span>
                   </div>
@@ -120,12 +138,17 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                 <div className="flex items-center justify-start pt-2 pb-2">
                   <div className="pl-5">
                     You are about to withdraw funds from contract, remember that
-                    once it is cancelled it will take some minutes to return to
+                    once it is redeemed it will take some minutes to return to
                     your wallet
                   </div>
                 </div>
               ) : (
-                "Buying"
+                <ContactForm
+                  actionText="Send"
+                  cancelFunction={() => {
+                    setShowActionDialog(false);
+                  }}
+                ></ContactForm>
               )
             }
             actionTitle={
@@ -133,14 +156,15 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                 ? "Do you want to deposit funds?"
                 : actionDialogType == "withdraw"
                 ? "Do you want to withdraw funds?"
-                : "Nothing"
+                : "Contact Us"
             }
             actionFunction={
               actionDialogType == "deposit"
                 ? (value) => {
-                    // console.log(data);
+                    console.log(value);
                     setShowActionDialog(false);
                     try {
+                      lockFunds(value);
                       //   enqueueSnackbar("Please sign with your wallet...", {
                       //     autoHideDuration: 2000,
                       //     variant: "info",
@@ -171,8 +195,12 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
                   }
                 : actionDialogType == "withdraw"
                 ? (value) => {
+                    //console.log(value);
+
                     try {
                       setShowActionDialog(false);
+                      //withdraw(value * 1000000000000000000);
+                      withdraw(value);
                       //   enqueueSnackbar("Please sign with your wallet...", {
                       //     autoHideDuration: 2000,
                       //     variant: "info",
@@ -236,3 +264,15 @@ export const BalanceContainer: FC<{ state_wallet }> = ({ state_wallet }) => {
     </div>
   );
 };
+function mapStateToProps(state) {
+  return {
+    state_wallet: state.wallet,
+    state_error: state.error,
+  };
+}
+function mapDispatchToProps(dispatch: any) {
+  return {};
+}
+export default compose(connect(mapStateToProps, mapDispatchToProps))(
+  BalanceContainer
+);
