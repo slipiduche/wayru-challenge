@@ -34,7 +34,7 @@ const Home: NextPage<{
     }
   }, []);
   useEffect(() => {
-    console.log(state_wallet);
+    // console.log(state_wallet);
   }, [state_wallet, state_error]);
   const [walletConnected, setwalletConnected] = useState(false);
   return (
