@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import ButtonPrimary from "../shared/Button/ButtonPrimary";
 
 const Home: NextPage = () => {
   return (
@@ -13,9 +14,7 @@ const Home: NextPage = () => {
       <h1>
         Login with <a href="https://metamask.io/">Metamask!</a>
       </h1>
-      <div>
-        <h1>Connect</h1>
-      </div>
+      <ButtonPrimary sizeClass="px-4 py-2 sm:px-5">Connect</ButtonPrimary>
 
       <footer className="text-sm">
         <a
