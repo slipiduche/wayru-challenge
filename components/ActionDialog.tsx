@@ -40,15 +40,21 @@ export const ActionDialog: FC<{
             {actionText == "Send" ? (
               <></>
             ) : (
-              <div className="relative px-6 flex items-center justify-start">
-                <p className="pb-0 pt-4   text-slate-500 text-lg leading-relaxed">
-                  {actionText == "Deposit"
-                    ? "Please set a value to deposit"
-                    : "Please set a value to withdraw"}
-                </p>
-              </div>
+              <>
+                {actionText == "Close" ? (
+                  <></>
+                ) : (
+                  <div className="relative px-6 flex items-center justify-start">
+                    <p className="pb-0 pt-4   text-slate-500 text-lg leading-relaxed">
+                      {actionText == "Deposit"
+                        ? "Please set a value to deposit"
+                        : "Please set a value to withdraw"}
+                    </p>
+                  </div>
+                )}
+              </>
             )}
-            {actionText == "Send" ? (
+            {actionText == "Send" || actionText == "Close" ? (
               <></>
             ) : (
               <div className="justify-start px-5 pt-2 pb-4">
@@ -79,15 +85,26 @@ export const ActionDialog: FC<{
               <></>
             ) : (
               <div className="flex items-center justify-start px-5 pt-4 pb-8 border-solid border-slate-200 rounded-b">
-                <ButtonPrimary
-                  className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
-                  onClick={() => {
-                    if (parseFloat(value) > 0) actionFunction(value);
-                  }}
-                >
-                  {actionTitle == "Succsess" ? "Ok" : actionText}
-                </ButtonPrimary>
-                {actionTitle == "Succsess" ? (
+                {actionTitle == "Success" ? (
+                  <ButtonPrimary
+                    className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
+                    onClick={() => {
+                      cancelFunction();
+                    }}
+                  >
+                    {actionTitle == "Success" ? "Ok" : actionText}
+                  </ButtonPrimary>
+                ) : (
+                  <ButtonPrimary
+                    className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
+                    onClick={() => {
+                      if (parseFloat(value) > 0) actionFunction(value);
+                    }}
+                  >
+                    {actionTitle == "Success" ? "Ok" : actionText}
+                  </ButtonPrimary>
+                )}
+                {actionTitle == "Success" ? (
                   <></>
                 ) : (
                   <ButtonSecondary

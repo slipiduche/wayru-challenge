@@ -1,14 +1,12 @@
 import * as types from "./walletTypes";
 
 export function walletConnected(payload) {
-  //console.log('really connected')
   return {
     type: types.WALLET_CONNECTED,
     payload: payload,
   };
 }
 export function walletDisconnected(payload) {
-  //console.log('really connected')
   return {
     type: types.DISCONNECT_WALLET,
     payload: payload,

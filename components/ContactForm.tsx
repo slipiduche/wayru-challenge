@@ -5,6 +5,7 @@ import FormItem from "./FormItem";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
 import Textarea from "../shared/Textarea/Textarea";
+import { sendEmail } from "../mail";
 type Inputs = {
   name: string;
   email: string;
@@ -12,9 +13,20 @@ type Inputs = {
 };
 export const ContactForm: FC<{
   actionText: string;
-
+  onSuccess: () => void;
   cancelFunction;
-}> = ({ actionText, cancelFunction }) => {
+}> = ({ actionText, cancelFunction, onSuccess }) => {
+  const onSubmit = (data) => {
+    cancelFunction();
+    sendEmail(data).then((res) => {
+      if (res) {
+        onSuccess();
+      } else {
+        alert("Mail not sended");
+      }
+      // console.log(res);
+    });
+  };
   const defaultValues: Inputs = {
     name: "",
     email: "",
@@ -55,7 +67,7 @@ export const ContactForm: FC<{
             //   value={""}
             {...register("name", {
               required: "This field is required",
-              maxLength: 25,
+              maxLength: 64,
             })}
           />
         </FormItem>
@@ -80,7 +92,7 @@ export const ContactForm: FC<{
             //   value={""}
             {...register("email", {
               required: "This field is required",
-              maxLength: 25,
+              maxLength: 64,
             })}
           />
         </FormItem>
@@ -123,10 +135,7 @@ export const ContactForm: FC<{
       <div className="flex items-center justify-start px-5 pt-4 pb-8 border-solid border-slate-200 rounded-b">
         <ButtonPrimary
           className="font-bold w-auto  text-sm ease-linear transition-all duration-150"
-          onClick={handleSubmit(async () => {
-            ///Send info to mail
-            console.log("submited");
-          })}
+          onClick={handleSubmit(onSubmit)}
         >
           {actionText}
         </ButtonPrimary>

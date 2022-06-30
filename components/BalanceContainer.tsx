@@ -13,6 +13,8 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
 }) => {
   const [showActionDialog, setShowActionDialog] = useState(false);
   const [actionDialogType, setActionDialogType] = useState(null);
+  const [successDialogContent, setSuccessDialogContent] = useState(null);
+
   return (
     <div className="container -mt-10 lg:-mt-16">
       <div className="relative bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 p-5 lg:p-8 rounded-3xl md:rounded-[40px] shadow-xl flex flex-col md:flex-row">
@@ -121,6 +123,8 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
                 ? "Deposit"
                 : actionDialogType == "withdraw"
                 ? "Witdraw"
+                : actionDialogType == "success"
+                ? "Close"
                 : "Send"
             }
             actionContent={
@@ -142,9 +146,18 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
                     your wallet
                   </div>
                 </div>
+              ) : actionDialogType == "success" ? (
+                <div className="flex items-center justify-start pt-2 pb-2">
+                  <div className="pl-5">{successDialogContent}</div>
+                </div>
               ) : (
                 <ContactForm
                   actionText="Send"
+                  onSuccess={() => {
+                    setSuccessDialogContent("Mail sended");
+                    setActionDialogType("success");
+                    setShowActionDialog(true);
+                  }}
                   cancelFunction={() => {
                     setShowActionDialog(false);
                   }}
@@ -156,15 +169,20 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
                 ? "Do you want to deposit funds?"
                 : actionDialogType == "withdraw"
                 ? "Do you want to withdraw funds?"
+                : actionDialogType == "success"
+                ? "Success"
                 : "Contact Us"
             }
             actionFunction={
               actionDialogType == "deposit"
                 ? (value) => {
-                    console.log(value);
                     setShowActionDialog(false);
                     try {
-                      lockFunds(value);
+                      lockFunds(value).then(() => {
+                        setSuccessDialogContent("Wait for your funds");
+                        setActionDialogType("success");
+                        setShowActionDialog(true);
+                      });
                       //   enqueueSnackbar("Please sign with your wallet...", {
                       //     autoHideDuration: 2000,
                       //     variant: "info",
@@ -195,12 +213,14 @@ const BalanceContainer: FC<{ state_wallet; state_error }> = ({
                   }
                 : actionDialogType == "withdraw"
                 ? (value) => {
-                    //console.log(value);
-
                     try {
                       setShowActionDialog(false);
                       //withdraw(value * 1000000000000000000);
-                      withdraw(value);
+                      withdraw(value).then(() => {
+                        setSuccessDialogContent("Wait for your funds");
+                        setActionDialogType("success");
+                        setShowActionDialog(true);
+                      });
                       //   enqueueSnackbar("Please sign with your wallet...", {
                       //     autoHideDuration: 2000,
                       //     variant: "info",

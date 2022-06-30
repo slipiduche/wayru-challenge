@@ -35,7 +35,6 @@ export const switchNetwork = async (dispatch) => {
   if (web3) {
     try {
       // check if the chain to connect to is installed
-      console.log("switching to robsten");
       await web3.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: "0x3" }], // chainId must be in hexadecimal numbers
@@ -54,7 +53,6 @@ export const switchNetwork = async (dispatch) => {
 };
 export const connectHandler = async (dispatch) => {
   const web3 = window.ethereum;
-  console.log("connectHandler");
   if (web3) {
     dispatch(setConnecting(true));
 
@@ -62,7 +60,7 @@ export const connectHandler = async (dispatch) => {
       const res = await web3.request({
         method: "eth_requestAccounts",
       });
-      console.log(res[0]);
+
       dispatch(setAccount(res[0]));
       const balance = await web3.request({
         method: "eth_getBalance",
@@ -81,7 +79,6 @@ export const connectHandler = async (dispatch) => {
       dispatch(walletConnected(false));
     }
   } else {
-    console.log("error");
     dispatch(set_error("Install MetaMask"));
     dispatch(setConnecting(false));
     dispatch(walletConnected(false));
@@ -142,18 +139,13 @@ export const getContractBalance = async (dispatch) => {
     provider.getSigner()
   );
   const balance = await contract.getBalance();
-  console.log(balance);
   const stringBalance = (
     parseFloat(balance.toString()) / 1000000000000000000
   ).toString();
   dispatch(setWalletContractBalance(stringBalance));
-  console.log("balance:", stringBalance);
 };
 
 export const withdraw = async (value) => {
-  console.log(value);
-
-  //console.log(answersList);
   const web3 = window.ethereum;
   // JSON ABI of the token contract
   const provider = new ethers.providers.Web3Provider(web3);

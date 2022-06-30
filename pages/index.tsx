@@ -27,8 +27,6 @@ const Home: NextPage<{
 }) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    //console.log("useEffect");
-
     verifyNetwork(dispatch);
     if (window) {
       window.ethereum.on("chainChanged", chainChangedProps);
@@ -83,6 +81,7 @@ const Home: NextPage<{
           </a>
         </div>
       </footer> */}
+      
     </div>
   );
 };
